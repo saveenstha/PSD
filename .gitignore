@@ -1,0 +1,42 @@
+# ---- Django ----
+__pycache__/
+*.pyc
+*.pyo
+*.sqlite3
+*.log
+*.pot
+*.mo
+db.sqlite3
+media/
+staticfiles/
+*.env
+
+# ---- React ----
+node_modules/
+build/
+*.log
+*.cache/
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ---- Airflow ----
+airflow/logs/
+airflow/scheduler/latest
+airflow/dags/__pycache__/
+
+# ---- Virtual Environment ----
+pds_env/
+venv/
+.env/
+
+# ---- IDE & Editor ----
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ---- OS Specific ----
+Thumbs.db
+.DS_Store

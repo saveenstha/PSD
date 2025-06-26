@@ -1,0 +1,54 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./backend:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DJANGO_SETTINGS_MODULE=backend.settings
+      - POSTGRES_DB=sustain_db
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=funtastic
+      - POSTGRES_HOST=localhost
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    command: npm start
+    volumes:
+      - ./frontend:/app
+    ports:
+      - "3000:3000"
+
+  db:
+    image: postgres:14
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: funtastic
+      POSTGRES_DB: sustain_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  airflow:
+    image: apache/airflow:2.7.1
+    environment:
+      - AIRFLOW__CORE__LOAD_EXAMPLES=False
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://sustain_user:sustain_pass@db/sustain_db
+    volumes:
+      - ./airflow:/opt/airflow
+    command: ["airflow", "standalone"]
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+
+volumes:
+  postgres_data:
